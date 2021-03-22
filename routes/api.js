@@ -39,8 +39,14 @@ module.exports = function (app) {
       }
     })
     
-    .delete(function(req, res){
+    .delete(async (req, res) => {
       //if successful response will be 'complete delete successful'
+      try {
+        await Book.deleteMany({})
+        return res.status(200).send('complete delete successful')
+      } catch (err) {
+        console.log(err)
+      }
     });
 
 
@@ -51,7 +57,6 @@ module.exports = function (app) {
       try {
         let book = await Book.findById(mongoose.Types.ObjectId(bookid))
         if (!book) return res.status(200).send('no book exists')
-
         const {title, _id, comments} = book
         return res.status(200).send({title, _id, comments})
       } catch (err) {
@@ -62,9 +67,7 @@ module.exports = function (app) {
     .post(async (req, res) => {
       let bookid = req.params.id;
       let comment = req.body.comment;
-
       if (!comment) return res.status(200).send('missing required field comment')
-
       try {
        let book = await Book.findById(mongoose.Types.ObjectId(bookid))
         if (!book) return res.status(200).send('no book exists')
@@ -84,7 +87,7 @@ module.exports = function (app) {
         let book = await Book.findById(mongoose.Types.ObjectId(bookid))
         if (!book) return res.status(200).send('no book exists')
         await Book.findByIdAndDelete(mongoose.Types.ObjectId(bookid))
-        return res.status(200).send('complete delete successful')
+        return res.status(200).send('delete successful')
       } catch (err) {
         console.log(err)
       }

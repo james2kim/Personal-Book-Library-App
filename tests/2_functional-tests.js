@@ -137,7 +137,7 @@ suite('Functional Tests', function() {
           .delete(`/api/books/${id}`)
           .end(function(err, res) {
             assert.equal(res.status, 200);
-            assert.equal(res.text, 'complete delete successful');
+            assert.equal(res.text, 'delete successful');
             done();
           });
       });
